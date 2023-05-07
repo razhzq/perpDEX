@@ -34,5 +34,6 @@ const dummyABI = contractAbi;
   for (let i = 0; i < assetPairAddress.length; i++) {
     const result = await readFromContract(assetPairAddress[i].contractAddress, dummyABI);
     console.log(`${assetPairAddress[i].asset}: `, result);
+    console.log(`${assetPairAddress[i].asset}: `, typeof(result));
   }
 })();
