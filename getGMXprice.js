@@ -12,7 +12,7 @@ const assetPrice = [
 async function fetchGMXPrice() {
     try {
         const response = await axios.get('https://api.gmx.io/prices');
-        console.log(response.data[0]);
+        console.log(response.data['0x82aF49447D8a07e3bd95BD0d56f35241523fBab1']);  // need to get individual price
     } catch (error) {
         console.log('Error')
     }
