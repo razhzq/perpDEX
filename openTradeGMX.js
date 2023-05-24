@@ -22,12 +22,12 @@ const gmxRawData = fs.readFileSync(gmxRouterPath);
 const gmxContractABI = JSON.parse(gmxRawData);
 
 //gmx position router
-const gmxPositionPath = path.resolve("contractABI/GMXRouter.json");
+const gmxPositionPath = path.resolve("contractABI/GMXPositionRouter.json");
 const gmxPositionRaw = fs.readFileSync(gmxPositionPath);
-const gmxPositionRouter = JSON.parse(gmxPositionRaw);
+const gmxPositionRouterABI = JSON.parse(gmxPositionRaw);
 
 //erc20 contract 
-const stableContractPath = path.resolve("");
+const stableContractPath = path.resolve("contractABI/DAIcontract.json");
 const stableRawData = fs.readFileSync(stableContractPath);
 const stableContractABI = JSON.parse(stableRawData);
 
@@ -45,6 +45,7 @@ async function openTradeGMX() {
     const account = web3.eth.accounts.privateKeyToAccount(privateKey);
     web3.eth.accounts.wallet.add(account);
     const gmxRouter = new web3.eth.Contract(gmxContractABI, '0xaBBc5F99639c9B6bCb58544ddf04EFA6802F4064')
+    const gmxPositionRouter = new web3.eth.Contract(gmxPositionRouterABI, '0xb87a436B93fFE9D75c5cFA7bAcFff96430b09868');
     const stable = new web3.eth.Contract(stableContractABI, '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1');  // DAI contract addressß
 
     try {
@@ -67,7 +68,7 @@ async function openTradeGMX() {
     // approvePlugin() -> DAIapprove() -> 
 
     } catch (error) {
-
+        console.log(error)
     }
 }
 
