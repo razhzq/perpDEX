@@ -13,7 +13,7 @@ const web3 = new Web3(new Web3.providers.HttpProvider(providerUrl));
 
 
 // setup account
-const privateKey = '8efdc0791463c898a60b543d4800937023a1ad3d9046cc885806ebed5092b4ce';
+const privateKey = '';
 
 const readFromContract = require('./getGNSprice');
 const gnsabiPath = path.resolve("contractABI/GNSPrice.json");  
@@ -29,7 +29,7 @@ async function openTradeGNS() {
 
      const account = web3.eth.accounts.privateKeyToAccount(privateKey);
      web3.eth.accounts.wallet.add(account);
-     const contract = new web3.eth.Contract(contractAbi, '0xDAFa580585d2849088a5212F729adFe9b9512413');
+     const contract = new web3.eth.Contract(contractAbi, '0xb3B13d3741A48876323C7cC17C5C6c47bcA223DF');
 
      const convPrice = (price / 1e8)
      console.log(convPrice)
@@ -61,7 +61,7 @@ async function openTradeGNS() {
 
      try {
        
-        const trade = contract.methods.openTrade(tradeTuple, 0, 0, '30000000000', '0x0000000000000000000000000000000000000000').send({ from: '0x6E7aD7BC0Bf749c87F59E8995c158cDa08b7E657', gasLimit: '5000000', transactionBlockTimeout: 200});
+        const trade = contract.methods.openTrade(tradeTuple, 0, 0, '12492725505', '0x0000000000000000000000000000000000000000').send({ from: '0x6E7aD7BC0Bf749c87F59E8995c158cDa08b7E657', gasLimit: '5000000', transactionBlockTimeout: 200});
 
      } catch (error) {
         console.log(error);
