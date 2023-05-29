@@ -11,19 +11,38 @@ const contractAbi = JSON.parse(rawData);
 const providerUrl = 'https://polygon-mumbai.g.alchemy.com/v2/I9k_EQCfvzjTOKfEp7EM2PJJ0HVYiNSK';
 const web3 = new Web3(new Web3.providers.HttpProvider(providerUrl));
 
-
 // setup account
-const privateKey = '';
+const privateKey = '8efdc0791463c898a60b543d4800937023a1ad3d9046cc885806ebed5092b4ce';
 
 const readFromContract = require('./getGNSprice');
 const gnsabiPath = path.resolve("contractABI/GNSPrice.json");  
 const gnsrawData = fs.readFileSync(gnsabiPath);  
 const pricecontractAbi = JSON.parse(gnsrawData);
 
+const pairIDandContract = [
+
+   { // BTC/USD
+      assetID: 0,
+      contractAddress: '0xc907E116054Ad103354f2D350FD2514433D57F6f'
+   },
+   { // ETH/USD
+      assetID: 1,
+      contractAddress: '0xF9680D99D6C9589e2a93a78A04A279e509205945'
+   },
+   { // LINK/USD
+      assetID: 2,
+      contractAddress: '0xd9FFdb71EbE7496cC440152d43986Aae0AB76665'
+   },
+   { // UNI/USD
+      assetID: 17,
+      contractAddress: '0xdf0Fb4e4F928d2dCB76f438575fDD8682386e13C'
+   }
+]
+
 
 async function openTradeGNS() {
 
-    const price = await readFromContract("0xc907E116054Ad103354f2D350FD2514433D57F6f", pricecontractAbi);
+    const price = await readFromContract("0xdf0Fb4e4F928d2dCB76f438575fDD8682386e13C", pricecontractAbi);
     console.log(price)
 
 
@@ -47,7 +66,7 @@ async function openTradeGNS() {
 
      const tradeTuple = {
         'trader': '0x6E7aD7BC0Bf749c87F59E8995c158cDa08b7E657',
-        'pairIndex': 0,
+        'pairIndex': 17,
         'index': 0,
         'initialPosToken': 0,
         'positionSizeDai': '2000000000000000000000',  // collateral in 1e18
