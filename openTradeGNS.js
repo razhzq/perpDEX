@@ -19,6 +19,11 @@ const gnsabiPath = path.resolve("contractABI/GNSPrice.json");
 const gnsrawData = fs.readFileSync(gnsabiPath);  
 const pricecontractAbi = JSON.parse(gnsrawData);
 
+//erc20 contract 
+const stableContractPath = path.resolve("contractABI/DAIcontract.json");
+const stableRawData = fs.readFileSync(stableContractPath);
+const stableContractABI = JSON.parse(stableRawData);
+
 const pairIDandContract = [
 
    { // BTC/USD
@@ -48,7 +53,9 @@ async function openTradeGNS() {
 
      const account = web3.eth.accounts.privateKeyToAccount(privateKey);
      web3.eth.accounts.wallet.add(account);
-     const contract = new web3.eth.Contract(contractAbi, '0xb3B13d3741A48876323C7cC17C5C6c47bcA223DF');
+   //   const contract = new web3.eth.Contract(contractAbi, '0xb3B13d3741A48876323C7cC17C5C6c47bcA223DF');  mumbai contract
+     const contract = new web3.eth.Contract(contractAbi, '0xcDCB434D576c5B1CF387cB272756199B7E72C44d');
+     const stable = new web3.eth.Contract(stableContractABI, '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1'); 
 
      const convPrice = (price / 1e8)
      console.log(convPrice)
@@ -79,8 +86,13 @@ async function openTradeGNS() {
 
 
      try {
-       
-        const trade = contract.methods.openTrade(tradeTuple, 0, 0, '12492725505', '0x0000000000000000000000000000000000000000').send({ from: '0x6E7aD7BC0Bf749c87F59E8995c158cDa08b7E657', gasLimit: '5000000', transactionBlockTimeout: 200});
+        
+        const collateral = '' // collateralValue from frontend * 1e18
+        stable.approve('0xcDCB434D576c5B1CF387cB272756199B7E72C44d', collateral ).send({ from: '0x6E7aD7BC0Bf749c87F59E8995c158cDa08b7E657', gasLimit: '5000000', transactionBlockTimeout: 200 })
+          .then(() => {
+            contract.methods.openTrade(tradeTuple, 0, 0, '12492725505', '0x0000000000000000000000000000000000000000').send({ from: '0x6E7aD7BC0Bf749c87F59E8995c158cDa08b7E657', gasLimit: '5000000', transactionBlockTimeout: 200});
+          })
+        
 
      } catch (error) {
         console.log(error);
