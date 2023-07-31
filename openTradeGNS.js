@@ -12,7 +12,7 @@ const providerUrl = 'https://polygon-mumbai.g.alchemy.com/v2/I9k_EQCfvzjTOKfEp7E
 const web3 = new Web3(new Web3.providers.HttpProvider(providerUrl));
 
 // setup account
-const privateKey = '8efdc0791463c898a60b543d4800937023a1ad3d9046cc885806ebed5092b4ce';
+const privateKey = '';
 
 const readFromContract = require('./getGNSprice');
 const gnsabiPath = path.resolve("contractABI/GNSPrice.json");  
