@@ -14,7 +14,7 @@ const web3 = new Web3(new Web3.providers.HttpProvider(providerUrl));
 // setup account
 const privateKey = '';
 
-const readFromContract = require('./getGNSprice');
+const readFromContract = require('../getPrice/getGNSprice');
 const gnsabiPath = path.resolve("contractABI/GNSPrice.json");  
 const gnsrawData = fs.readFileSync(gnsabiPath);  
 const pricecontractAbi = JSON.parse(gnsrawData);

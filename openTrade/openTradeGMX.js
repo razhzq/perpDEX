@@ -3,9 +3,7 @@ const Web3 = require('web3');
 const path = require("path");
 const fs = require("fs");
 
-const abiPath = path.resolve("contractABI/GNSTradingContract.json");  
-const rawData = fs.readFileSync(abiPath);  
-const contractAbi = JSON.parse(rawData);
+
 
 // setup provider
 const providerUrl = 'https://arb-mainnet.g.alchemy.com/v2/QKEmGABomINorp6sJe8ir_JXMKRaMGeD';
