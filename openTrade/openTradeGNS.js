@@ -45,17 +45,17 @@ const pairIDandContract = [
 ]
 
 
-async function openTradeGNS() {
+async function openTradeGNS(pairContractAddress, address, pairIndex, collateral, isLong, leverage ) {
 
-    const price = await readFromContract("0xdf0Fb4e4F928d2dCB76f438575fDD8682386e13C", pricecontractAbi);
+    const price = await readFromContract(pairContractAddress, pricecontractAbi);
     console.log(price)
 
 
-     const account = web3.eth.accounts.privateKeyToAccount(privateKey);
+     const account = address;
      web3.eth.accounts.wallet.add(account);
    //   const contract = new web3.eth.Contract(contractAbi, '0xb3B13d3741A48876323C7cC17C5C6c47bcA223DF');  mumbai contract
-     const contract = new web3.eth.Contract(contractAbi, '0xcDCB434D576c5B1CF387cB272756199B7E72C44d');
-     const stable = new web3.eth.Contract(stableContractABI, '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1'); 
+     const contract = new web3.eth.Contract(contractAbi, '0xcDCB434D576c5B1CF387cB272756199B7E72C44d');  //GNStradingContract mumbai
+     const stable = new web3.eth.Contract(stableContractABI, '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1'); // GNS testnet DAI
 
      const convPrice = (price / 1e8)
      console.log(convPrice)
@@ -71,15 +71,17 @@ async function openTradeGNS() {
      console.log(`openPrice: ${contractPrice}`)
      console.log(`contractp: ${contractTp}`)
 
+     const collateralConv = collateral * 1e18;
+
      const tradeTuple = {
-        'trader': '0x6E7aD7BC0Bf749c87F59E8995c158cDa08b7E657',
-        'pairIndex': 17,
-        'index': 0,
+        'trader': address,
+        'pairIndex': pairIndex,
+        'index': 0,  //tradeIndex
         'initialPosToken': 0,
-        'positionSizeDai': '2000000000000000000000',  // collateral in 1e18
+        'positionSizeDai': collateralConv,  // collateral in 1e18
         'openPrice': contractPrice,
-        'buy': true,
-        'leverage': 5,  //leverage adjustable by slider on frontend
+        'buy': isLong,
+        'leverage': leverage,  //leverage adjustable by slider on frontend
         'tp': contractTp,
         'sl': 0
      }
@@ -90,7 +92,7 @@ async function openTradeGNS() {
         const collateral = '' // collateralValue from frontend * 1e18
         stable.approve('0xcDCB434D576c5B1CF387cB272756199B7E72C44d', collateral ).send({ from: '0x6E7aD7BC0Bf749c87F59E8995c158cDa08b7E657', gasLimit: '5000000', transactionBlockTimeout: 200 })
           .then(() => {
-            contract.methods.openTrade(tradeTuple, 0, 0, '12492725505', '0x0000000000000000000000000000000000000000').send({ from: '0x6E7aD7BC0Bf749c87F59E8995c158cDa08b7E657', gasLimit: '5000000', transactionBlockTimeout: 200});
+            contract.methods.openTrade(tradeTuple, 0, 0, '12492725505', '0x0000000000000000000000000000000000000000').send({ from: address, gasLimit: '5000000', transactionBlockTimeout: 200});
           })
         
 
@@ -99,4 +101,4 @@ async function openTradeGNS() {
      }
 }
 
-openTradeGNS();
+module.exports = openTradeGNS;

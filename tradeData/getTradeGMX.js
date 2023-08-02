@@ -18,17 +18,17 @@ const providerUrl = 'https://polygon-mumbai.g.alchemy.com/v2/I9k_EQCfvzjTOKfEp7E
 const web3 = new Web3(new Web3.providers.HttpProvider(providerUrl));
 
 
-async function getTradeGMX() {
+async function getTradeGMX(address, collateralAddress, indexTokenAddress, isLong) {
 
     const contract = new web3.eth.Contract(contractAbi, storageContractAddress);
 
     try {
     
         const tradeList = await contract.methods.getPositions('0x489ee077994B6658eAfA855C308275EAd8097C4A',  // arbitrum vault 
-                                                               '',   // user address
-                                                               [''], //  array of collateralToken 
-                                                               [''], // array of indexToken
-                                                               true   // boolean isLong trades                                       
+                                                               address,   // user address
+                                                               [collateralAddress], //  array of collateralToken 
+                                                               [indexTokenAddress], // array of indexToken
+                                                               isLong   // boolean isLong trades                                       
                                                                ).call()
                                                                  
         return tradeList;
