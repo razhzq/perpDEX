@@ -39,7 +39,7 @@ const assetPair = [
 ]
 
 
-async function openTradeGMX(pairContract, collateral, isLong, address) {
+async function openTradeGMX(pairContract, collateral, isLong, address, leverage) {
 
     const account = web3.eth.accounts.privateKeyToAccount(privateKey);
     web3.eth.accounts.wallet.add(account);
@@ -47,10 +47,12 @@ async function openTradeGMX(pairContract, collateral, isLong, address) {
     const gmxPositionRouter = new web3.eth.Contract(gmxPositionRouterABI, '0xb87a436B93fFE9D75c5cFA7bAcFff96430b09868');
     const stable = new web3.eth.Contract(stableContractABI, '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1');  // DAI contract addressß
 
-    const collateralConv = collateral * 1e18;
+    const collateralConv = web3.utils.toWei(toString(collateral), 'ether')
 
     const price = await fetchGMXPrice(pairContract);
     const acceptablePrice = price *1.5;
+
+    const sizeDelta = web3.utils.toWei(toString(collateral *leverage), 'tether');
 
     try {
         gmxRouter.methods.approvePlugin('0xb87a436B93fFE9D75c5cFA7bAcFff96430b09868').send({ from: address, gasLimit: '5000000', transactionBlockTimeout: 200 }).then(() => {
@@ -61,7 +63,7 @@ async function openTradeGMX(pairContract, collateral, isLong, address) {
                 pairContract,   //  address of token to long or short
                 collateralConv,   // collateral amount 
                 0,    //minOut 0
-                collateral * 1e30,  // sizeDelta = collateral x leverage // in 1e30 format
+                sizeDelta,  // sizeDelta = collateral x leverage // in 1e30 format
                 isLong,  // isLong - true for long - false for short
                 acceptablePrice, //acceptable Price for the pair = price from API + slippage // price from API + 0.5% (1e30 format)
                 gmxPositionRouter.minExecutionFee, //min execution fee

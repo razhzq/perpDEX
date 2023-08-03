@@ -71,7 +71,7 @@ async function openTradeGNS(pairContractAddress, address, pairIndex, collateral,
      console.log(`openPrice: ${contractPrice}`)
      console.log(`contractp: ${contractTp}`)
 
-     const collateralConv = collateral * 1e18;
+     const collateralConv = web3.utils.toWei(toString(collateral), 'ether');
 
      const tradeTuple = {
         'trader': address,
